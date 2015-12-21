@@ -4,9 +4,11 @@ import select
 from collections import namedtuple
 import threading
 import time
+print "test"
 
 time_since_last_message = time.time()
 my_ip = socket.gethostbyname(socket.gethostname())
+print my_ip
 # node = namedtuple("node", ["ip", "port"])
 my_port = int(sys.argv[1])      # port number
 timeout = int(sys.argv[2])      # timeout
@@ -374,4 +376,4 @@ while nodeActive:
         print "blocking with", len(buf), "remaining"
         select.select([], [input], [])
         print "unblocked"
-thread1.join()
+# thread1.join()
