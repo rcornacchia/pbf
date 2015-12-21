@@ -156,8 +156,8 @@ input = [receiving_socket, sys.stdin]
 output = [sys.stdin]
 #====================================================================
 # spawn thread to handle time checking
-# thread1 = myThread(time_since_last_message)
-# thread1.start()
+thread1 = myThread(time_since_last_message)
+thread1.start()
 time.sleep(1)
 #====================================================================
 # ROUTE_UPDATE()
