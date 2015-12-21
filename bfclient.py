@@ -150,7 +150,7 @@ class myThread (threading.Thread):
 #====================================================================
 # Create two sockets
 sending_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-receiving_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+cket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 receiving_socket.bind((my_ip, my_port))
 input = [receiving_socket, sys.stdin]
 output = [sys.stdin]
@@ -211,7 +211,7 @@ while nodeActive:
             else:
                 # update neighbor time if message received from neighbor
                 # if distance vector changes or timeout is reached, resend
-                data = s.recv(1024)
+                data = s.recvfrom(1024)
                 data = data.split()
                 # SHOW_RT()
 # ['ROUTE_UPDATE', '160.39.231.6', '1964', '5', '160.39.231.6', '6363', '5', '160.39.231.6', '31389', '5', 'EOT']
