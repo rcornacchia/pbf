@@ -150,7 +150,7 @@ class myThread (threading.Thread):
 #====================================================================
 # Create two sockets
 sending_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-cket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+receiving_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 receiving_socket.bind((my_ip, my_port))
 input = [receiving_socket, sys.stdin]
 output = [sys.stdin]
