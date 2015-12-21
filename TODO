@@ -1,0 +1,6 @@
+implement bellman-ford updating
+describe protocol in README
+reset timeout
+%> command prompt
+# don't need to detect cycles
+# check to see if any of the weights in the route update are shorter or an infinite weight
