@@ -2,7 +2,7 @@ import sys
 import socket
 import select
 from collections import namedtuple
-import thread
+import threading
 import time
 
 time_since_last_message = time.time()
@@ -92,58 +92,61 @@ def LINK_DESTROYED(broken_node, target_node):
 # thread function --> checks time to see if it has been more than timeout since last message
 # if it has been, then add message to write, so that select will be called
 # Function also tests to see if neighbors have been not messaged in 3 * timeout seconds
-def run(self, delay):
-    time_since_last_message = time.time()
-    while nodeActive:
-        # print "Thread started"
-        now = time.time()
-        # print now - time_since_last_message
-        # print timeout
-        nodes_to_remove = []
-        # check neighbors to see if any of the time has passed timeout*3
-        for neighbor in neighbors:
-            if(now - neighbors[neighbor] > timeout * 2):
-                #TODO change timeout back to 3
-                # remove neighbor
+class myThread (threading.Thread):
+    def __init__(self, start_time):
+        threading.Thread.__init__(self)
+        self.process = None
+        time_since_last_message = start_time
+    def run(self):
+        time_since_last_message = time.time()
+        while nodeActive:
+            # print "Thread started"
+            now = time.time()
+            # print now - time_since_last_message
+            # print timeout
+            nodes_to_remove = []
+            # check neighbors to see if any of the time has passed timeout*3
+            for neighbor in neighbors:
+                if(now - neighbors[neighbor] > timeout * 2):
+                    #TODO change timeout back to 3
+                    # remove neighbor
 
-                print "REMOVING DEACTIVATED NEIGHBOR"
-                deactivated_links[neighbor] = neighbor_distance[neighbor]
-                nodes_to_remove.append(neighbor)
-        for inactive_node in nodes_to_remove:
+                    print "REMOVING DEACTIVATED NEIGHBOR"
+                    deactivated_links[neighbor] = neighbor_distance[neighbor]
+                    nodes_to_remove.append(neighbor)
+            for inactive_node in nodes_to_remove:
 
-            if inactive_node in neighbors:
-                dv[inactive_node] == float("inf")
-                del neighbors[inactive_node]
+                if inactive_node in neighbors:
+                    dv[inactive_node] == float("inf")
+                    del neighbors[inactive_node]
 
-            for key in predecessor:
-                if predecessor[key] == inactive_node:
-                    if key in neighbors:
-                        dv[key] = neighbor_distance[key]
-                    else:
-                        dv[inactive_node] = float("inf")
-                        dv[key] = float("inf")
-                        predecessor[key] = "no link exists"
-
-
+                for key in predecessor:
+                    if predecessor[key] == inactive_node:
+                        if key in neighbors:
+                            dv[key] = neighbor_distance[key]
+                        else:
+                            dv[inactive_node] = float("inf")
+                            dv[key] = float("inf")
+                            predecessor[key] = "no link exists"
 
 
-                    # if key in neighbors:
-                    #     dv[key] =
-                    # if first_predecessor[key] is not predecessor[key]:
-                    #     predecessor[key] = first_predecessor[key]
-                    # else:
-                    #     predecessor[key] = "no link exists"
-            # del neighbors[node]
-            ROUTE_UPDATE()
 
-        # Check to see if last message sent is inside the timeout window
-        if (now - time_since_last_message > timeout):
-            time_since_last_message = time.time()
-            ROUTE_UPDATE()
-        time.sleep(1)
-#====================================================================
-# spawn thread to handle time checking
-thread.start_new_thread( run, ("thread1", 2, ) )
+
+                        # if key in neighbors:
+                        #     dv[key] =
+                        # if first_predecessor[key] is not predecessor[key]:
+                        #     predecessor[key] = first_predecessor[key]
+                        # else:
+                        #     predecessor[key] = "no link exists"
+                # del neighbors[node]
+                ROUTE_UPDATE()
+
+
+            # Check to see if last message sent is inside the timeout window
+            if (now - time_since_last_message > timeout):
+                time_since_last_message = time.time()
+                ROUTE_UPDATE()
+            time.sleep(1)
 #====================================================================
 # Create two sockets
 sending_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -152,7 +155,11 @@ receiving_socket.bind((my_ip, my_port))
 input = [receiving_socket, sys.stdin]
 output = [sys.stdin]
 #====================================================================
+# spawn thread to handle time checking
+thread1 = myThread(time_since_last_message)
+thread1.start()
 time.sleep(1)
+#====================================================================
 # ROUTE_UPDATE()
 while nodeActive:
     try:
@@ -367,4 +374,4 @@ while nodeActive:
         print "blocking with", len(buf), "remaining"
         select.select([], [input], [])
         print "unblocked"
-# thread1.join()
+thread1.join()
