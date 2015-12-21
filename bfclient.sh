@@ -11,7 +11,7 @@ end tell'
 
 
 osascript -e 'tell app "Terminal"
-    do script with command "python bfclient.py '$port2' 5 128.59.15.396 '$port1' 5 128.59.15.396 '$port3' 5" in window 4
+    do script with command "python bfclient.py '$port2' 5 128.59.15.396 '$port1' 5 160.39.231.6 '$port3' 5" in window 4
 end tell'
 echo port 4 && python ~/Desktop/bellman-ford-master/bfclient.py $port4 5 128.59.15.396 $port2 7
 

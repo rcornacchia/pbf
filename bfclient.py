@@ -7,8 +7,7 @@ import time
 print "test"
 
 time_since_last_message = time.time()
-my_ip = socket.gethostbyname(socket.gethostname())
-print my_ip
+my_ip = str(socket.gethostbyname(socket.gethostname()))
 # node = namedtuple("node", ["ip", "port"])
 my_port = int(sys.argv[1])      # port number
 timeout = int(sys.argv[2])      # timeout
@@ -158,8 +157,8 @@ input = [receiving_socket, sys.stdin]
 output = [sys.stdin]
 #====================================================================
 # spawn thread to handle time checking
-# thread1 = myThread(time_since_last_message)
-# thread1.start()
+thread1 = myThread(time_since_last_message)
+thread1.start()
 time.sleep(1)
 #====================================================================
 # ROUTE_UPDATE()
